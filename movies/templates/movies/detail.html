@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+.movie-page {
+    max-width: 900px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    color: #fff;
+}
+
+.movie-poster img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.movie-info h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.movie-info .rating {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.movie-info .genres span {
+    background: #444;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.movie-overview {
+    color: #444;
+    margin: 20px 0;
+    line-height: 1.6;
+    font-size: 17px;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: #1e90ff;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #fff;
+    transition: .2s;
+}
+
+.back-btn:hover {
+    background: #1470c9;
+}
+
+.title-data{
+    color #444;
+}
+
+.videos-position{
+    height: 400px;
+    width: 800px;
+}
+
+/* Mobile */
+@media(max-width: 768px) {
+    .movie-page {
+        grid-template-columns: 1fr;
+    }
+    .movie-poster img {
+        max-width: 280px;
+        margin: 0 auto;
+        display: block;
+    }
+    .movie-info {
+        text-align: center;
+    }
+}
+</style>
+
+<div class="movie-page">
+    
+    <div class="movie-poster">
+        <img src="https://image.tmdb.org/t/p/w500{{ movies.poster_path }}" alt="{{ movies.title }}">
+    </div>
+
+    <div class="movie-info">
+        <h1>{{ movie.title }}</h1>
+
+        <div class="rating">⭐ <b>{{ movies.vote_average }}</b></div>
+
+        <div class="genres">
+            {% for genre in movie.genres %}
+                <span>{{ genre.name }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="movie-overview">{{ movies.overview }}</div>
+
+        <p class="title-data"><b>Дата выхода: {{ movies.release_date }}</b></p>
+
+        <a href="/" class="back-btn">← Назад</a>
+    </div>
+</div>
+
+<h2>Трейлер</h2>
+<iframe class="videos-position"
+    src="https://www.youtube.com/embed/{{ videos.0.key }}"
+    frameborder="0"
+    allowfullscreen>
+</iframe>
+{% endblock content %}
+
+{% block nav %}
+<nav id="nav">
+	<ul>
+		<!--<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>-->
+		<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Фильм</span></a></li>
+		<li><a href="#about" id="about-link"><span class="icon solid fa-user">Коментарии</span></a></li>
+		<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
+	</ul>
+</nav>
+{% endblock nav %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block nav %}
+<nav id="nav">
+	<ul>
+		<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
+		<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Portfolio</span></a></li>
+		<li><a href="#about" id="about-link"><span class="icon solid fa-user">About Me</span></a></li>
+		<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
+	</ul>
+</nav>
+{% endblock nav %}
+
+
+{% block content %}
+<header>
+	<h2>Популярные фильмы</h2>
+</header>
+<div class="row">
+    {% for movie in movies|slice:":15" %}
+        <div class="col-4 col-12-mobile">
+            <article class="item">
+                <a href="{% url 'movie_detail' movie.id %}" class="image fit">
+                    <img src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+                </a>
+                <header>
+                    <h3>{{ movie.title|truncatechars:15 }}</h3>
+                    <p>⭐ {{ movie.vote_average }}</p>
+                </header>
+            </article>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+    
+
+{% block footer %}
+<div id="footer">
+    <ul class="copyright">
+        <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
+</div>
+{% endblock footer %}
