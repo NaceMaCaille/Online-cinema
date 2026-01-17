@@ -21,11 +21,20 @@
 				<div class="top">
 
 					<!-- Logo -->
+					
+					{% if not user.is_authenticated %}
 						<div id="logo">
 							<span class="image avatar48"><a href="#"><img src="{% static "images/avatar.jpg" %}" alt="" /></a></span>
-							<h1 id="title">Jane Doe</h1>
-							<p>Hyperspace Engineer</p>
+							<h1 id="title">Не автаризовн</h1>
+							<a href='{% url "user:registration" %}'><p>Войти или зарегестрироватся</p></a>
 						</div>
+					{% else %}
+						<div id="logo">
+							<span class="image avatar48"><a href="#"><img src="{{user.image.url}}" alt="" /></a></span>
+							<h1 id="title">{{request.user.username}}</h1>
+							<a href='{% url "user:profile" %}'><p>Профиль</p></a>
+						</div>
+					{% endif %}
 						
 
 					<!-- Nav -->

@@ -1,0 +1,191 @@
+
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f3f3f3;
+}
+
+.container {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+form {
+    background: #fff;
+    padding: 25px;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #4a6cf7;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #3956d4;
+}
+
+.alert {
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.alert li {
+    margin-bottom: 4px;
+}
+
+.alert-error {
+    background: #fdecea;
+    border: 1px solid #f5c2c0;
+    color: #a94442;
+}
+
+.login {
+    padding: 0px 0px 0px 25px
+}
+
+.button-login {
+    padding: 0px 10px 0px 120px
+}
+</style>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация и Авторизация</title>
+    <link rel="stylesheet" href="#">
+</head>
+<body>
+
+<div class="container">
+    {% if request.resolver_match.url_name == 'registration' %}
+    <!-- РЕГИСТРАЦИЯ -->
+    <form  action="{% url "user:registration" %}" method="POST">
+        {% csrf_token %}
+        <h2>Регистрация</h2>
+
+        <label>
+            Имя
+            <input type="text" id="id_first_name" name="first_name" 
+            value="{% if form.first_name.value %}{{form.first_name.value}}{% endif %}" required>
+            {% if form.first_name.errors %}  
+            <div class="alert alert-error">{{form.first_name.errors}}</div>
+            {% endif %}
+        </label>
+
+        <label>
+            Фамилия
+            <input type="text" id="id_last_name" name="last_name" 
+            value="{% if form.last_name.value %}{{form.last_name.value}}{% endif %}" required>
+            {% if form.last_name.errors %}  
+            <div class="alert alert-error">{{form.last_name.errors}}</div>
+            {% endif %}
+        </label>
+
+        <label>
+            Имя пользователя
+            <input type="text" id="id_username" name="username"
+            value="{% if form.username.value %}{{form.username.value}}{% endif %}" required>
+            {% if form.username.errors %}  
+            <div class="alert alert-error">{{form.username.errors}}</div>
+            {% endif %}
+        </label>
+
+        <label>
+            Почта
+            <input type="email" id="id_email" name="email"
+            value="{% if form.first_name.value %}{{form.email.value}}{% endif %}" required>
+            {% if form.email.errors %}  
+            <div class="alert alert-error">{{form.email.errors}}</div>
+            {% endif %}
+        </label>
+
+        <label>
+            Пароль
+            <input type="password" id="id_password1" name="password1"
+            value="{% if form.password1.value %}{{form.password1.value}}{% endif %}" required>
+            {% if form.password1.errors %}  
+            <div class="alert alert-error">{{form.password1.errors}}</div>
+            {% endif %}
+        </label>
+
+        <label>
+            Подтверждение пароля
+            <input type="password" id="id_password2" name="password2"
+            value="{% if form.password2.value %}{{form.password2.value}}{% endif %}" required>
+            {% if form.password2.errors %}  
+            <div class="alert alert-error">{{form.password2.errors}}</div>
+            {% endif %}
+        </label>
+
+        <button type="submit">Зарегистрироваться</button>
+
+        <p class="login">Если есть существующий аккаунт</p>
+        <h4 class="button-login"><a href="{% url "user:login" %}">Войти</a></h4>
+    </form>
+    {% endif %}
+    
+{% if request.resolver_match.url_name == 'login' %}
+<!-- АВТОРИЗАЦИЯ -->
+<form action="{% url "user:login" %}" method="POST">
+    {% csrf_token %}
+    {% if request.GET.next %}
+        <input type="hidden" name="text" value="{{request.GET.next}}">
+    {% endif %}
+        
+        <h2>Авторизация</h2>
+        
+        <label>
+          Юзернейм
+            <input type="text" id="id_username" name="username" value="{{form.username.value}}" required>
+          </label>
+          
+          <label>
+            Пароль
+            <input type="password" id="id_password" name="password" required>
+          </label>
+          
+          <button type="submit">Войти</button>
+    </form>
+</div>
+
+{% endif %}
+</body>
+</html>

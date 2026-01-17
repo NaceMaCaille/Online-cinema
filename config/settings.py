@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    
+
     'movies',
     'users',
 
@@ -140,5 +142,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-TMDB_API_KEY = "93d7a68c6f686595ee521d935bda877c"
-TMDB_BASE_URL = "https://api.themoviedb.org/3"
+TMDB_API_KEY = '93d7a68c6f686595ee521d935bda877c'
+TMDB_BASE_URL = 'https://api.themoviedb.org/3'

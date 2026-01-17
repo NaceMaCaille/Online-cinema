@@ -8,33 +8,83 @@
 		<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
 		<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Portfolio</span></a></li>
 		<li><a href="#about" id="about-link"><span class="icon solid fa-user">About Me</span></a></li>
-		<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
+		<li><a href="{% url "user:logout" %}" id="contact-link" method="POST"><span class="icon solid fa-envelope">Contact</span></a></li>
 	</ul>
 </nav>
 {% endblock nav %}
 
 
 {% block content %}
-<header>
-	<h2>Популярные фильмы</h2>
-</header>
-<div class="row">
-    {% for movie in movies|slice:":15" %}
+<form action="{% url 'movie:search' %}" method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Поиск фильмов..."
+        value="{{ query }}"
+    >
+    <button type="submit">🔍</button>
+</form>
+
+{% if query %}
+    <h2>Результаты поиска: «{{ query }}»</h2>
+
+    {% if movies %}
+    <div class="row">
+        {% for movie in movies|slice:":15" %}
         <div class="col-4 col-12-mobile">
             <article class="item">
-                <a href="{% url 'movie_detail' movie.id %}" class="image fit">
-                    <img src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+                <a href="{% url 'movie:movie_detail' movie.id %}" class="image fit">
+                    {% if movie.poster_path %}
+                    <img
+                        src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}"
+                        alt="{{ movie.title }}"
+                    >
+                    {% else %}
+                    <!-- опционально: плейсхолдер если нет постера -->
+                    <img src="{% static 'images/no-poster.png' %}" alt="Нет постера">
+                    {% endif %}
                 </a>
                 <header>
+                    <!-- Если не используешь подсветку — просто выводим title -->
                     <h3>{{ movie.title|truncatechars:15 }}</h3>
                     <p>⭐ {{ movie.vote_average }}</p>
                 </header>
             </article>
         </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>По запросу «{{ query }}» ничего не найдено 😢</p>
+    {% endif %}
+
+{% else %}
+<header>
+    <h2>Популярные фильмы</h2>
+</header>
+<div class="row">
+    {% for movie in movies|slice:":15" %}
+    <div class="col-4 col-12-mobile">
+        <article class="item">
+            <a href="{% url 'movie:movie_detail' movie.id %}" class="image fit">
+                {% if movie.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                <img src="{% static 'images/no-poster.png' %}" alt="Нет постера">
+                {% endif %}
+            </a>
+            <header>
+                <h3>{{ movie.title|truncatechars:15 }}</h3>
+                <p>⭐ {{ movie.vote_average }}</p>
+            </header>
+        </article>
+    </div>
     {% endfor %}
 </div>
+{% endif %}
 {% endblock %}
-    
+
+
+
 
 {% block footer %}
 <div id="footer">

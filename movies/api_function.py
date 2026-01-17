@@ -27,3 +27,13 @@ def get_movie_video(movie_id):
     }
     response = requests.get(url, params=params)
     return response.json()
+
+def get_search_movie(movie_name):
+    url = f"{settings.TMDB_BASE_URL}/search/movie"
+    params = {
+        "api_key": settings.TMDB_API_KEY,
+        "language": "ru-RU",
+        "query": movie_name
+    }
+    response = requests.get(url, params=params)
+    return response.json()

@@ -14,11 +14,15 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = (
+            "first_name",
+            "last_name",
             "username",
             "email",
             "password1",
             "password2",
         )
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     username = forms.CharField()
     email = forms.CharField()
     password1 = forms.CharField()
@@ -28,10 +32,14 @@ class ProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = (
+            "first_name",
+            "last_name",
             "image",
             "username",
             "email"
         )
+    first_name = forms.CharField()
+    last_name = forms.CharField()
     image = forms.ImageField()
     username = forms.CharField()
     email = forms.CharField()

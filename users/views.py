@@ -5,6 +5,8 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from users.forms import ProfileForm, UserLoginForm, UserRegistrationForm
+from users.models import FavoriteMovie
+from movies.views import get_movie_detail
 
 def login(request):
     if request.method == 'POST':
@@ -12,7 +14,7 @@ def login(request):
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
-            user = auth.aauthenticate(username=username, password=password)
+            user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
 
@@ -28,7 +30,7 @@ def login(request):
         'form': form
     }
 
-    return render(request, 'users/login.html', context)
+    return render(request, 'users/registration_and_login.html', context)
 
 def registration(request):
     if request.method == 'POST':
@@ -45,7 +47,7 @@ def registration(request):
         'form': form
     }
 
-    return render(request, 'users/registration.html')
+    return render(request, 'users/registration_and_login.html', context)
 
 @login_required
 def profile(request):
@@ -58,9 +60,17 @@ def profile(request):
     else:
         form = ProfileForm(instance=request.user)
 
+    favorites = FavoriteMovie.objects.filter(user=request.user)
+
+    movies = []
+    for fav in favorites:
+        movie_data = get_movie_detail(fav.tmdb_id)
+        movies.append(movie_data)
+
     context = {
         'title': 'Home - Кабинет',
-        "form": form
+        "form": form,
+        'favorites': movies
     }
 
     return render(request, 'users/profile.html', context)
@@ -68,4 +78,18 @@ def profile(request):
 @login_required
 def logout(request):
     auth.logout(request)
-    return redirect(reverse("main:index"))
+    return redirect(reverse("movie:index"))
+
+@login_required
+def add_favorite(request, tmdb_id):
+
+    FavoriteMovie.objects.get_or_create(user=request.user, tmdb_id=tmdb_id)
+
+    return redirect(request.META.get('HTTP_REFERER','/'))
+
+@login_required
+def delete_favorite(request, tmdb_id):
+
+    FavoriteMovie.objects.filter(user=request.user, tmdb_id=tmdb_id).delete()
+
+    return redirect(request.META.get('HTTP_REFERER','/'))

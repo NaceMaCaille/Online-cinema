@@ -85,13 +85,13 @@
 <div class="movie-page">
     
     <div class="movie-poster">
-        <img src="https://image.tmdb.org/t/p/w500{{ movies.poster_path }}" alt="{{ movies.title }}">
+        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movies.title }}">
     </div>
 
     <div class="movie-info">
         <h1>{{ movie.title }}</h1>
 
-        <div class="rating">⭐ <b>{{ movies.vote_average }}</b></div>
+        <div class="rating">⭐ <b>{{ movie.vote_average }}</b></div>
 
         <div class="genres">
             {% for genre in movie.genres %}
@@ -99,11 +99,18 @@
             {% endfor %}
         </div>
 
-        <div class="movie-overview">{{ movies.overview }}</div>
+        <div class="movie-overview">{{ movie.overview }}</div>
 
-        <p class="title-data"><b>Дата выхода: {{ movies.release_date }}</b></p>
+        <p class="title-data"><b>Дата выхода: {{ movie.release_date }}</b></p>
 
         <a href="/" class="back-btn">← Назад</a>
+        {% if user.is_authenticated %}
+            {% if movie.id in favorite_tmdb_ids %}
+                <a href="{% url 'users:remove_favorites' movie.id %}">💔 Убрать</a>
+            {% else %}
+                <a href="{% url 'users:add_favorites' movie.id %}">❤️ В избранное</a>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 
