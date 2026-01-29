@@ -1,0 +1,131 @@
+<style>
+.filter-panel {
+    width: 260px;
+    background: #121212;
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    margin: 50px 30px 30px 60px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 5px;
+}
+
+.genres-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.genre-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.genre-item input {
+    accent-color: #e50914;
+}
+
+.filter-section input,
+.filter-section select {
+    width: 100%;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    background: #1f1f1f;
+    color: #fff;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-actions button {
+    flex: 1;
+    padding: 8px;
+    background: #e50914;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.reset-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    background: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+</style>
+
+<div class="filter-panel">
+    <form method="get">
+
+        <!-- ЖАНРЫ -->
+        <div class="filter-section">
+            <h3>Жанры</h3>
+            <div class="genres-list">
+                {% for genre in genres %} 
+                    <label class="genre-item" for="genre-{{ genre.id }}">
+                        <input
+                            id="genre-{{ genre.id }}"
+                            type="checkbox"
+                            name="genre"
+                            value="{{ genre.id }}"
+                            ...
+                        >
+                        <span>{{ genre.name }}</span>
+                    </label>
+                {% endfor %} 
+            </div>
+        </div>
+
+        <!-- ГОД -->
+        <div class="filter-section">
+            <h3>Год выхода</h3>
+            <input
+                type="number"
+                name="year"
+                min="1900"
+                max="2100"
+                value="{{ request.GET.year }}"
+                placeholder="Например, 2023"
+            >
+        </div>
+
+        <!-- РЕЙТИНГ -->
+        <div class="filter-section">
+            <h3>Рейтинг</h3>
+            <select name="rating">
+                <option value="">Любой</option>
+                <option value="7" {% if request.GET.rating == '7' %}selected{% endif %}>7+</option>
+                <option value="8" {% if request.GET.rating == '8' %}selected{% endif %}>8+</option>
+                <option value="9" {% if request.GET.rating == '9' %}selected{% endif %}>9+</option>
+            </select>
+        </div>
+
+        <!-- КНОПКИ -->
+        <div class="filter-actions">
+            <button type="submit">Применить</button>
+            <a href="{% url 'movie:movies_list' %}" class="reset-btn">Сбросить</a> 
+        </div>
+
+    </form>
+</div>

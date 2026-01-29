@@ -82,6 +82,30 @@
 }
 </style>
 
+<script>
+document.querySelectorAll('.status-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const tmdbId = this.dataset.tmdb;
+    const status = this.dataset.status;
+
+    fetch(`/user/status/ajax/${tmdbId}/${status}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        this.textContent = '✔ Добавлено';
+        this.disabled = true;
+      }
+    });
+  });
+});
+</script>
+
+
 <div class="movie-page">
     
     <div class="movie-poster">
@@ -104,13 +128,29 @@
         <p class="title-data"><b>Дата выхода: {{ movie.release_date }}</b></p>
 
         <a href="/" class="back-btn">← Назад</a>
-        {% if user.is_authenticated %}
-            {% if movie.id in favorite_tmdb_ids %}
-                <a href="{% url 'users:remove_favorites' movie.id %}">💔 Убрать</a>
-            {% else %}
-                <a href="{% url 'users:add_favorites' movie.id %}">❤️ В избранное</a>
-            {% endif %}
-        {% endif %}
+
+            <div class="movie-actions">
+                <form method="post" action="{% url 'user:set_movie_status' movie.id 'planned' %}">
+                    {% csrf_token %}
+                    <button type="submit">📌 В планах</button>
+                </form>
+
+                <form method="post" action="{% url 'user:set_movie_status' movie.id 'favorite' %}">
+                    {% csrf_token %}
+                    <button type="submit">❤️ В избранное</button>
+                </form>
+
+                <form method="post" action="{% url 'user:set_movie_status' movie.id 'watched' %}">
+                    {% csrf_token %}
+                    <button type="submit">✅ Просмотрено</button>
+                </form>
+
+                <form method="post" action="{% url 'user:delete_status' movie.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+            </div>
+
     </div>
 </div>
 

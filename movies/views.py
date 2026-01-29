@@ -1,6 +1,11 @@
 from django.shortcuts import render
 
-from .api_function import get_popular_movies, get_movie_detail, get_movie_video, get_search_movie
+from .api_function import (get_popular_movies, get_movie_detail,
+                            get_movie_video, get_search_movie,
+                            discover_movie, get_genres)
+
+from .utils import build_tmdb_filters
+
 
 def popular_movies(request):
     movies = get_popular_movies()
@@ -11,16 +16,9 @@ def movie_detail(request, movie_id):
     movies = get_movie_detail(movie_id)
     videos = get_movie_video(movie_id)
 
-    favorite_tmdb_ids = []
-    if request.user.is_authenticated:
-        favorite_tmdb_ids = list(
-            request.user.favorite_movies.values_list('tmdb_id', flat=True)
-        )
-
     return render(request, "movies/detail.html", 
         {"movie": movies, 
-        "videos": videos, 
-        "favorite_tmdb_ids": favorite_tmdb_ids}
+        "videos": videos}
         )
 
 def search_movie(request):
@@ -34,3 +32,16 @@ def search_movie(request):
 
     return render(request, "movies/index.html", {"movies": movies, "query": query})
 
+def movie_list(request):
+    tmdb_filters = build_tmdb_filters(request)
+
+    data = discover_movie(tmdb_filters)
+
+    context = {
+        'movies': data.get('results', []),
+        'genres': get_genres(),
+        'page': data.get('page'),
+        'total_pages': data.get('total_pages'),
+    }
+
+    return render(request, 'movies/filter.html', context)

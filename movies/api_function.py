@@ -37,3 +37,23 @@ def get_search_movie(movie_name):
     }
     response = requests.get(url, params=params)
     return response.json()
+
+def discover_movie(params):
+    url = f"{settings.TMDB_BASE_URL}/discover/movie"
+    default_params = {
+        "api_key": settings.TMDB_API_KEY,
+        "language": "ru-RU",
+        "sort_by": "popularity.desc"
+    }
+    response = requests.get(url, params={**default_params, **params})
+    return response.json()
+
+def get_genres():
+    response = requests.get(
+        f'{settings.TMDB_BASE_URL}/genre/movie/list',
+        params={
+            "api_key": settings.TMDB_API_KEY,
+            "language": "ru-RU"
+        }
+    )
+    return response.json().get('genres', [])

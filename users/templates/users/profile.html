@@ -102,26 +102,28 @@ body {
   </div>
 
   <div class="tabs">
-    <button class="active">Избранное</button>
-    <button>В планах</button>
-    <button>Просмотрено</button>
+    <button><a href="{% url "user:favorite_movies" %}">Избранное</button></a>
+    <button> <a href="{% url "user:planned_movies" %}">В планах</button></a>
+    <button> <a href="{% url "user:watched_movies" %}">Просмотрено</button></a>
   </div>
-<div class="tabs">
-  <button class="active">Избранное</button>
-</div>
-<div class="movies">
-  
-{% for movie in favorites %}
-  <div class="movie-card" style="max-width: 250px">
-      {% if movie.poster_path %}
-          <a href="{% url "movie:movie_detail" movie.id %}"><img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}"></a>
-      {% endif %}
-      <h3>{{ movie.title }}</h3>
-  </div>
-{% endfor %}
-</div>
 
+{% if watched_movies %}
+<div class="movies">
+    {% include "users/partials/movie_list.html" with movies=watched_movies %}
 </div>
+{% endif %}
+
+{% if planned_movies %}
+<div class="movies">
+    {% include "users/partials/movie_list.html" with movies=planned_movies %}
+</div>
+{% endif %}
+
+{% if favorite_movies %}
+<div class="movies">
+    {% include "users/partials/movie_list.html" with movies=favorite_movies %}
+</div>
+{% endif %}
 
 </body>
 </html>

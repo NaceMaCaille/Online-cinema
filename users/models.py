@@ -12,23 +12,17 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-class FavoriteMovie(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_movies')
+
+class UserMovie(models.Model):
+    STATUS_CHOICES = [
+        ('planned', 'В планах'),
+        ('favorite', 'Избранное'),
+        ('watched', 'Просмотрено'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     tmdb_id = models.IntegerField()
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES)
 
     class Meta:
         unique_together = ('user', 'tmdb_id')
-
-class ViewedMovie(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='viewed_movies')
-    tmdb_id = models.IntegerField()
-
-    class Meta:
-        unique_together = ('user', 'tmdb_id')
-
-class PlanMovie(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='plan_movies')
-    tmdb_id = models.IntegerField()
-
-    class Meta:
-        unique_together = ('user', 'tmdb_id')  
