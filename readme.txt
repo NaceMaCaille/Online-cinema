@@ -21,4 +21,4 @@
 
 2. Склонируйте репозиторий:  
    ```bash
-   git clone https://github.com/NaceMaCaille/app
+   git clone https://github.com/NaceMaCaille/Online-cinema
