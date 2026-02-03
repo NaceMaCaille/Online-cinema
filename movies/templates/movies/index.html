@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 
 {% load static %}
-
 {% block nav %}
-{% include "movies/filter.html" %}
+    {% if request.resolver_match.url_name == 'search' %}
+        {% include "movies/filter.html" %}
+    {% endif %}
 {% endblock nav %}
-
 
 {% block content %}
 <form action="{% url 'movie:search' %}" method="get" class="search-form">
     <input
-        type="text"
-        name="q"
-        placeholder="Поиск фильмов..."
-        value="{{ query }}"
+    type="text"
+    name="q"
+    placeholder="Поиск фильмов..."
+    value="{{ query }}"
     >
     <button type="submit">🔍</button>
 </form>
 
 {% if query %}
-    <h2>Результаты поиска: «{{ query }}»</h2>
+
+<h2>Результаты поиска: «{{ query }}»</h2>
 
     {% if movies %}
     <div class="row">

@@ -22,26 +22,44 @@ def movie_detail(request, movie_id):
         )
 
 def search_movie(request):
-    query = request.GET.get('q','').strip()
+    query = request.GET.get('q', '').strip()
 
+    data = {}
     movies = []
 
     if query:
         data = get_search_movie(query)
-        movies = data.get("results", [])
+    else:
+        # 🎛 ФИЛЬТРЫ
+        tmdb_filters = build_tmdb_filters(request)
+        data = discover_movie(tmdb_filters)
 
-    return render(request, "movies/index.html", {"movies": movies, "query": query})
+    movies = data.get('results', [])
 
-def movie_list(request):
-    tmdb_filters = build_tmdb_filters(request)
-
-    data = discover_movie(tmdb_filters)
+    selected_genres = request.GET.getlist('genre')
 
     context = {
-        'movies': data.get('results', []),
+        'movies': movies,
+        'query': query,
         'genres': get_genres(),
         'page': data.get('page'),
         'total_pages': data.get('total_pages'),
+        'selected_genres': selected_genres
     }
 
-    return render(request, 'movies/filter.html', context)
+    return render(request, "movies/index.html", context)
+
+
+# def movie_list(request):
+#     tmdb_filters = build_tmdb_filters(request)
+
+#     data = discover_movie(tmdb_filters)
+
+#     context = {
+#         'movies': data.get('results', []),
+#         'genres': get_genres(),
+#         'page': data.get('page'),
+#         'total_pages': data.get('total_pages'),
+#     }
+
+#     return render(request, 'movies/filter.html', context)

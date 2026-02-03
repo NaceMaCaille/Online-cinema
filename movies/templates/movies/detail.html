@@ -81,30 +81,7 @@
     }
 }
 </style>
-
-<script>
-document.querySelectorAll('.status-btn').forEach(btn => {
-  btn.addEventListener('click', function () {
-    const tmdbId = this.dataset.tmdb;
-    const status = this.dataset.status;
-
-    fetch(`/user/status/ajax/${tmdbId}/${status}/`, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token }}',
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        this.textContent = '✔ Добавлено';
-        this.disabled = true;
-      }
-    });
-  });
-});
-</script>
-
+{% load static %}
 
 <div class="movie-page">
     
@@ -162,13 +139,4 @@ document.querySelectorAll('.status-btn').forEach(btn => {
 </iframe>
 {% endblock content %}
 
-{% block nav %}
-<nav id="nav">
-	<ul>
-		<!--<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>-->
-		<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Фильм</span></a></li>
-		<li><a href="#about" id="about-link"><span class="icon solid fa-user">Коментарии</span></a></li>
-		<li><a href="#contact" id="contact-link"><span class="icon solid fa-envelope">Contact</span></a></li>
-	</ul>
-</nav>
-{% endblock nav %}
+

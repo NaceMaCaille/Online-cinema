@@ -76,24 +76,26 @@
 </style>
 
 <div class="filter-panel">
-    <form method="get">
+    <form action="{% url 'movie:search' %}" method="get">
 
         <!-- ЖАНРЫ -->
         <div class="filter-section">
             <h3>Жанры</h3>
             <div class="genres-list">
-                {% for genre in genres %} 
+                {% for genre in genres %}
                     <label class="genre-item" for="genre-{{ genre.id }}">
                         <input
                             id="genre-{{ genre.id }}"
                             type="checkbox"
                             name="genre"
                             value="{{ genre.id }}"
-                            ...
+                            {% if genre.id|stringformat:"s" in selected_genres %}
+                                checked
+                            {% endif %}
                         >
                         <span>{{ genre.name }}</span>
                     </label>
-                {% endfor %} 
+                {% endfor %}
             </div>
         </div>
 
@@ -124,8 +126,9 @@
         <!-- КНОПКИ -->
         <div class="filter-actions">
             <button type="submit">Применить</button>
-            <a href="{% url 'movie:movies_list' %}" class="reset-btn">Сбросить</a> 
+            <a href="{% url 'movie:search' %}" class="reset-btn">Сбросить</a>
         </div>
 
     </form>
 </div>
+

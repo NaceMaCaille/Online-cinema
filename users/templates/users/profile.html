@@ -83,7 +83,25 @@ body {
   font-size: 12px;
   color: #38bdf8;
 }
+
+.edit-profile-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background: #e50914;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background .15s ease;
+}
+
+.edit-profile-btn:hover {
+    background: #ff1e28;
+}
+
 </style>
+ 
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -96,9 +114,17 @@ body {
 
 <div class="profile">
   <div class="profile-header">
+    
+    {% if user.image %}
     <img src="{{user.image.url}}" alt="Аватар" style="max-width: 110px">
+    {% else %}
+    <img src="{% static "images/avatar.jpg" %}" alt="Аватар" style="max-width: 110px">
+    {% endif %}
+      
     <h1>{{request.user.username}}</h1>
-    <p>Люблю хорошие фильмы 🎬</p>
+    <a href="{% url 'user:edit_profile' %}" class="edit-profile-btn">
+    Редактировать профиль
+    </a>
   </div>
 
   <div class="tabs">

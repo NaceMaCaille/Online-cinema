@@ -1,7 +1,7 @@
 
 def build_tmdb_filters(request):
 
-    params = []
+    params = {}
 
     genre_ids = request.GET.getlist('genre')
     year = request.GET.get('year')
